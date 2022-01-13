@@ -1,0 +1,17 @@
+{
+  "hosting": {
+    "rewrites": [
+      {
+        "source": "/api/users",
+        "function": "sendFearNotification"
+      }
+    ]
+  },
+  "functions": {
+    "source": "functions"
+  },
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  }
+}

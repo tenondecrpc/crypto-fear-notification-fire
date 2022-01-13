@@ -27,7 +27,23 @@ exports.sendFearNotification = functions.https.onRequest((req, res) => {
           }
         };
         // Send notifications to all tokens.
-        await admin.messaging().sendToDevice(tokens, payload);
+        const response = await admin.messaging().sendToDevice(tokens, payload);
+        // For each message check if there was an error.
+        response.results.forEach((result, index) => {
+          const error = result.error;
+          if (error) {
+            functions.logger.error(
+              'Failure sending notification to',
+              tokens[index],
+              error
+            );
+            // Cleanup the tokens who are not registered anymore.
+            if (error.code === 'messaging/invalid-registration-token' ||
+                error.code === 'messaging/registration-token-not-registered') {
+              // Remove logic
+            }
+          }
+        });
         res.json(tokens);
       });
   }
